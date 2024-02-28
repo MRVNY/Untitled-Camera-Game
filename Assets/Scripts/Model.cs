@@ -48,13 +48,13 @@ public class Model : MonoBehaviour
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
             DOF.focusDistance.value -= 0.1f;
-            print(DOF.focusDistance.value);
+            // print(DOF.focusDistance.value);
 
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0f && DOF.focusDistance.value<10) // backwards
         {
             DOF.focusDistance.value += 0.1f;
-            print(DOF.focusDistance.value);
+            // print(DOF.focusDistance.value);
         }
     }
     
