@@ -1,0 +1,4 @@
+repository "Untitled Camera Game@marvinyao@cloud"
+  path "/"
+    br "/main"
+    co "/main"

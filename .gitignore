@@ -80,3 +80,10 @@ crashlytics-build.properties
 .vscode/
 .idea/
 .vsconfig
+
+# exclude artworks
+*.fbx
+*.vroid
+*.vrm
+*.blend
+*.unity
