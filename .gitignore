@@ -80,6 +80,7 @@ crashlytics-build.properties
 .vscode/
 .idea/
 .vsconfig
+.plastic/
 
 # exclude future artworks & scenes & writing
 *.fbx
@@ -88,5 +89,6 @@ crashlytics-build.properties
 *.blend
 *.unity
 *.json
+Pitch.md
 
-# Assets/Installed Packages/
+Assets/Installed Packages/
