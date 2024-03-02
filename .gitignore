@@ -87,3 +87,5 @@ crashlytics-build.properties
 *.vrm
 *.blend
 *.unity
+
+# Assets/Installed Packages/
