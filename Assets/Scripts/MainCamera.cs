@@ -21,8 +21,6 @@ public class MainCamera : MonoBehaviour
         //change volume focus distance
         GetComponentInChildren<Volume>().profile.TryGet(out DOF);
         DOF.focusDistance.value = 10;
-        
-        
     }
 
     // Update is called once per frame

@@ -81,11 +81,12 @@ crashlytics-build.properties
 .idea/
 .vsconfig
 
-# exclude artworks
+# exclude future artworks & scenes & writing
 *.fbx
 *.vroid
 *.vrm
 *.blend
 *.unity
+*.json
 
 # Assets/Installed Packages/

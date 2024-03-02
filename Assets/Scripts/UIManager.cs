@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     {
         Instance = this;
         
-        SwitchUI(UIType.None);
+        SwitchUI(UIType.VisualNovel);
     }
 
     // Update is called once per frame
@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
         SwitchUI(UIType.None);
     }
 
-    private void SwitchUI(UIType type)
+    public void SwitchUI(UIType type)
     {
         photoReview.gameObject.SetActive(false);
         visualNovel.gameObject.SetActive(false);
