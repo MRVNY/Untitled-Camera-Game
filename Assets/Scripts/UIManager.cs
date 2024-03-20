@@ -35,6 +35,7 @@ public class UIManager : MonoBehaviour
         
         SwitchUI(UIType.PhotoReview);
         PhotoReview.Instance.photoFrame.sprite = Sprite.Create(photo, new Rect(0, 0, photo.width, photo.height), Vector2.zero);
+        MainCamera.GameEditor.Instance.AddAngle();
         
         yield return new WaitForSeconds(2);
         SwitchUI(UIType.None);

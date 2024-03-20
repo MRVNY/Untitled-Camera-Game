@@ -2312,8 +2312,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   face: {fileID: 3485925136971553027}
-  image: {fileID: 0}
-  canvas: {fileID: 0}
 --- !u!1 &4238317785976141890
 GameObject:
   m_ObjectHideFlags: 0

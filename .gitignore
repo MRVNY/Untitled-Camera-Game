@@ -87,6 +87,7 @@ crashlytics-build.properties
 *.vroid
 *.vrm
 *.blend
+*.blend1
 *.unity
 *.json
 Pitch.md
