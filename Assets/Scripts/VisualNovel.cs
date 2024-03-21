@@ -8,40 +8,48 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class VisualNovel : UIPanel
 { 
     public static VisualNovel Instance;
     // Start is called before the first frame update
-
     private string node;
     private JObject convoTree;
+    private JObject cameraTree;
 
-    private TextMeshProUGUI TextBox;
-    private List<string> toWrite = new List<string>();
-    private string written = "";
+    private TextMeshProUGUI _textBox;
+    private List<string> _toWrite = new List<string>();
+    private string _toType = "";
+    private string _written = "";
     
     private Task writing;
-    // public Button skipButton;
     bool skipped = false;
+    private State _state = State.Done;
     
-    private void Start()
+    private new void Start()
     {
         Instance = this;
         base.Start();
         
         if (GameData.S.convoNode != null)
         {
-            StartCoroutine("LoadConvo");
+            StartCoroutine(LoadConvo());
             
             node = GameData.S.convoNode;
             
-            TextBox = GetComponentInChildren<TextMeshProUGUI>();
-            // skipButton = GetComponent<Button>();
-            // skipButton.onClick.AddListener(() => { Next(); });
+            _textBox = GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        setDialog();
+        SetDialog();
+    }
+    
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && UIManager.CurrentUI == UIType.VisualNovel)
+        {
+            // Next();
+        }
     }
 
     private IEnumerator LoadConvo()
@@ -63,14 +71,19 @@ public class VisualNovel : UIPanel
             convoTree = JObject.Parse(File.ReadAllText(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Dialog.json"));
     }
     
-    public void ClearDialog()
+    private void TestCamera()
     {
-        toWrite.Clear();
-        written = "";
-        TextBox.text = "";
+        // for
     }
     
-    public void setDialog()
+    public void ClearDialog()
+    {
+        _toWrite.Clear();
+        _written = "";
+        _textBox.text = "";
+    }
+
+    private void SetDialog()
     {
         node = GameData.S.convoNode;
         JToken jNode = convoTree[node];
@@ -81,58 +94,69 @@ public class VisualNovel : UIPanel
         }
 
         // set text
-        if (toWrite.Count == 0)
+        if (_toWrite.Count == 0)
         {
-            string text = jNode[GameData.S.gameLanguage.ToString()].ToString();
-            //if (text.Contains("{name}")) text = text.Replace("{name}", Global.GD.player);
-            toWrite = text.Split('\n').ToList();
+            string text = jNode[GameData.S.gameLanguage.ToString()]?.ToString();
+            if (text != null) _toWrite = text.Split('\n').ToList();
         }
 
-        writing = TypeWriter(toWrite[0]);
+        writing = TypeWriter(_toWrite[0], Color.black);
     }
-
     
-    async Task TypeWriter(string toType)
+    async Task TypeWriter(string text, Color color)
     {
-        skipped = false;
-        // skipButton.enabled = true;
-        string story = toType;
-        TextBox.text = written;
-        foreach (char c in story) 
+        _state = State.Type;
+        
+        _toType = text;
+        _written = "";
+        _textBox.text = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + _written + "</color>" + "<color=#00000000>" + _toType+ "</color>" ;
+
+        while (_toType.Length > 0)
         {
-            if(skipped) break;
-            TextBox.text += c;
-            await Task.Delay(10);
+            if(_state == State.Skip) break;
+            
+            //pop first character
+            char c = _toType[0];
+            _toType = _toType.Remove(0, 1);
+            _written += c;
+            _textBox.text = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + _written + "</color>" + "<color=#00000000>" + _toType+ "</color>" ;
+            
+            await Task.Delay(GameData.Instance.textSpeed);
         }
-        written += story + "\n\n";
-        skipped = true;
+        
+        if(_state == State.Skip) _textBox.text = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + text + "</color>";
+        _state = State.Done;
     }
     public async void Next()
     {
-        if (skipped && toWrite.Count <= 1)
+        if (skipped && _toWrite.Count <= 1)
         {
             UIManager.Instance.SwitchUI(UIType.None);
-            toWrite.Clear();
+            _toWrite.Clear();
         }
 
         else if (skipped)
         {
-            toWrite.RemoveAt(0);
-            // skipButton.enabled = false;
-            if (toWrite.Count == 0)
+            _toWrite.RemoveAt(0);
+            if (_toWrite.Count == 0)
             {
                 UIManager.Instance.SwitchUI(UIType.None);
             }
-            else setDialog();
+            else SetDialog();
         }
 		
         else if (writing != null)
         {
             skipped = true;
             await writing;
-            TextBox.text = written;
-			
-            // if (toWrite.Count==1) skipButton.enabled = true;
+            _textBox.text = _written;
         }
+    }
+    
+    private enum State
+    {
+        Type,
+        Skip,
+        Done
     }
 }

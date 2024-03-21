@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
+
+    public static UIType CurrentUI;
     
     [SerializeField] private UIPanel photoReview;
     [SerializeField] private UIPanel visualNovel;
@@ -16,7 +18,8 @@ public class UIManager : MonoBehaviour
     {
         Instance = this;
         
-        SwitchUI(UIType.VisualNovel);
+        SwitchUI(UIType.None);
+        CurrentUI = GameData.Instance.currentUI;
     }
 
     // Update is called once per frame
@@ -35,7 +38,7 @@ public class UIManager : MonoBehaviour
         
         SwitchUI(UIType.PhotoReview);
         PhotoReview.Instance.photoFrame.sprite = Sprite.Create(photo, new Rect(0, 0, photo.width, photo.height), Vector2.zero);
-        MainCamera.GameEditor.Instance.AddAngle();
+        MainCamera.Instance.AddAngle();
         
         yield return new WaitForSeconds(2);
         SwitchUI(UIType.None);
@@ -43,6 +46,8 @@ public class UIManager : MonoBehaviour
 
     public void SwitchUI(UIType type)
     {
+        CurrentUI = type;
+        
         photoReview.gameObject.SetActive(false);
         visualNovel.gameObject.SetActive(false);
         
@@ -64,5 +69,7 @@ public enum UIType
 {
     None,
     PhotoReview,
-    VisualNovel
+    VisualNovel,
+    Test,
+    Editor
 }

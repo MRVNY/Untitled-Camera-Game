@@ -17,7 +17,6 @@ public class PhotoReview : UIPanel
         base.Start();
 
         photoFrame = transform.GetChild(0).GetComponent<Image>();
-        print(photoFrame.gameObject.name);
     }
 
     // Update is called once per frame

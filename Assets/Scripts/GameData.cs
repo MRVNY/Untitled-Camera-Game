@@ -14,11 +14,18 @@ public struct SaveData
 public class GameData : MonoBehaviour
 {
     public static SaveData S;
+    public static GameData Instance;
     private static string savePath;
+    
+    
+    public float focusSpeed = 1;
+    public int textSpeed = 100;
+    public UIType currentUI = UIType.None;
     
     // Start is called before the first frame update
     void Awake()
     {
+        Instance = this;
         savePath = Application.persistentDataPath + "/saves/";
         Load();
         
